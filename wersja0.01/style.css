@@ -1,0 +1,17 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto+Condensed");
+:root {
+    --main-col: #FFF7F1;
+    --main-col2: #FFE4C9;
+    --main-col3: #E78895;
+    --main-col4: #BED1CF;
+  }
+body{
+    background-color: var(--main-col);
+}
+header{
+    font-family: 'Roboto Condensed';
+    background-color: var(--main-col2);
+}
+main{
+    background-color: var(--main-col3);
+}
