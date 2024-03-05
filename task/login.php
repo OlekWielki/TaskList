@@ -13,12 +13,12 @@
 </form>
 <?php 
     session_start();
-    $con = new Mysqli("localhost", "root" , "", "uzytkownicy");
+    $con = new Mysqli("localhost", "root" , "", "users");
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $username = $_POST['username'];
         $password = $_POST['password'];
     
-        $sql = "SELECT * FROM users WHERE login='$username'";
+        $sql = "SELECT * FROM users WHERE name='$username'";
         $result = mysqli_query($con, $sql);
     
         if (mysqli_num_rows($result) > 0) {
@@ -26,6 +26,7 @@
             if (password_verify($password, $row['password'])) {
                 $_SESSION['login'] = $username;
                 echo "Login successful!";
+                header('Location: index.php');
             } else {
                 echo "Incorrect password!";
             }
