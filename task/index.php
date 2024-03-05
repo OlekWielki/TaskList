@@ -30,6 +30,17 @@
                 <input type="submit" name="submit" id="button">
             </span>
         </form>
+        <?php
+            session_start();
+            
+            if($_SESSION['login']==""){
+                echo "nic nie ma";
+                header('Location: register.php');
+            }
+            else{
+                echo $_SESSION['login'];
+            }
+        ?>
     </main>
     <footer>
         <p>Olek & Szymon Inc.</p>
