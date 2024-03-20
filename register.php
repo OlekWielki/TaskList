@@ -12,6 +12,7 @@
         <input type="submit">
     </form>
     <?php 
+        session_start();
         $con = new Mysqli("localhost", "root" , "", "users");
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $username = $_POST['username'];
@@ -21,15 +22,14 @@
         
             $sql = "INSERT INTO users (name, password) VALUES ('$username', '$hashed_password')";
         
-            if (mysqli_query($con, $sql)) {
+            if ($con->query($sql)) {
                 echo "Registration successful!";
-                header('Location: login.php');
-            } else {
-                echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+                $_SESSION['login'] = $username;
+                header('Location: index.php');
             }
         }
+        
         mysqli_close($con);
         ?>
-        <a href="login.php">Zaloguj się</a>
 </body>
 </html>
