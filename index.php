@@ -33,7 +33,6 @@
         }
         else{
             if(isset($_POST['submit'])){
-                echo $_SESSION['login'];
                 $con = new Mysqli("localhost", "root" , "", "users");
                 $task = $_POST['zadanie'];
                 $date = $_POST['data'];
@@ -44,14 +43,14 @@
         }
     ?>
     </main>
-    <section>
+    <section id="taski">
         <?php
             $name = $_SESSION['login'];
             $con = new Mysqli("localhost", "root" , "", "users");
             $sql="SELECT task, date FROM tasks WHERE name='$name'";
             $wiersz = $con->query($sql);
             while($wynik = $wiersz->fetch_row()){
-                echo "$wynik[0] $wynik[1] <br>";
+                echo "<p class='taskcontainer'>$wynik[0] $wynik[1]</p>";
             }
         ?>
     </section>
