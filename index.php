@@ -48,7 +48,7 @@
         <?php
             $name = $_SESSION['login'];
             $con = new Mysqli("localhost", "root" , "", "users");
-            $sql="SELECT task, date FROM tasks WHERE name='$name'";
+            $sql="SELECT task, date FROM tasks WHERE name='$name' ORDER BY date ASC";
             $wiersz = $con->query($sql);
             while($wynik = $wiersz->fetch_row()){
                 echo "$wynik[0] $wynik[1] <br>";
@@ -62,12 +62,17 @@
 
     function wyswietlAlert() {
         <?php
+            $sql="SELECT task, date FROM tasks WHERE name='$name' ORDER BY date ASC";
+            $wiersz = $con->query($sql);
+            $wynik = $wiersz->fetch_row();
+            
             echo "
-            var godzinaZPHP = '$date';
-            var taskZPHP = '$task'; 
-
+            var godzinaZPHP = '$wynik[1]';
+            var taskZPHP = '$wynik[0]'; 
+            
             ";
         ?>
+        
     	var dzisiaj = new Date();
             function dodajZero(num) {
             return num < 10 ? '0' + num : num;
@@ -79,12 +84,13 @@
         var minuta = dzisiaj.getMinutes();
 
         var dateandtime =
-            dzisiaj.getFullYear() + '-' + dodajZero(miesiac) + '-' + dodajZero(dzien) + 'T' +
-            dodajZero(godzina) + ':' + dodajZero(minuta);
+            dzisiaj.getFullYear() + '-' + dodajZero(miesiac) + '-' + dodajZero(dzien) + ' ' +
+            dodajZero(godzina) + ':' + dodajZero(minuta) + ":00.000000";
             if (dateandtime === godzinaZPHP) {
-                alert("wykonaj zadanie" + taskZPHP);
-                console.log("jebać")
+                alert("wykonaj zadanie " + taskZPHP);
 	        }
+        console.log(dateandtime);
+        console.log(godzinaZPHP);
         }
         setInterval(wyswietlAlert, 1000);
     </script>
