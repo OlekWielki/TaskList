@@ -5,6 +5,23 @@
 	--main-col3: #e78895;
 	--main-col4: #bed1cf;
 }
+#taski{
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-weight: bold;
+	flex-direction: column;
+}
+.wyswietl{
+
+}
+.taskcontainer{
+	display: flex;
+}
+#usun{
+	width: 5%;
+}
 a {
 	text-decoration: none;
 }
@@ -57,7 +74,7 @@ form {
 	align-items: center;
 	justify-content: center;
 }
-input {
+.forms{
 	height: 32px;
 	margin: 20px;
 	font-size: 24px;

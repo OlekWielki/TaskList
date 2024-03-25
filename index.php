@@ -17,12 +17,12 @@
         <form method="post">
             <span id="formularz">
                 <Label for="zadanie">Task</Label><br>
-                <input type="text" name="zadanie" id="zadanie" required><br>
+                <input type="text" name="zadanie" id="zadanie" class="forms" required><br>
                 <Label for="data">Data i czas</Label><br>
-                <input type="datetime-local" name="data" id="data" required><br>
+                <input type="datetime-local" name="data" id="data" class="forms" required><br>
             </span>
             <span id="przycisk">
-                <input type="submit" name="submit" id="submit">
+                <input type="submit" name="submit" id="submit" class="forms">
             </span>
         </form>
         <?php 
@@ -33,7 +33,6 @@
         }
         else{
             if(isset($_POST['submit'])){
-                echo $_SESSION['login'];
                 $con = new Mysqli("localhost", "root" , "", "users");
                 $task = $_POST['zadanie'];
                 $date = $_POST['data'];
@@ -44,15 +43,21 @@
         }
     ?>
     </main>
-    <section>
+    <section id="taski">
         <?php
+            
             $name = $_SESSION['login'];
             $con = new Mysqli("localhost", "root" , "", "users");
             $sql="SELECT task, date FROM tasks WHERE name='$name' ORDER BY date ASC";
             $wiersz = $con->query($sql);
             while($wynik = $wiersz->fetch_row()){
-                echo "$wynik[0] $wynik[1] <br>";
+                echo "<form method='POST' class='wyswietl'>";
+                echo "<div class='taskcontainer'>$wynik[0] $wynik[1]";
+                echo "<input type='submit' id='usun' name='usun' value='usun'>";
+                echo "</div><br>";
+                echo "</form>";
             }
+            
         ?>
     </section>
     <footer>
