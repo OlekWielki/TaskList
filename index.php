@@ -55,23 +55,38 @@
     while ($wynik = $wiersz->fetch_assoc()) {
         echo "<form method='POST' class='wyswietl'>";
         echo "<div class='taskcontainer' id='task_$wynik[id]'>$wynik[task] $wynik[date]";
-        echo "<input type='hidden' name='task_id' value='$wynik[id]'>"; // Dodajemy pole ukryte z id zadania
+        echo "<input type='hidden' name='task_id' value='$wynik[id]'>";
         echo "<input type='submit' class='usun' name='usun' value='usun'>";
         echo "</div><br>";
+        echo "<input type='text' name='change'>";
+        echo "<input type='submit' class='zmien' name='zmien' value='zmien'>";
+        echo "<br>";
         echo "</form>";
 }
 
 if (isset($_POST['usun']) && isset($_POST['task_id'])) {
     $task_id = $_POST['task_id'];
-    // Usuwanie rekordu z bazy danych
     $sql = "DELETE FROM tasks WHERE id='$task_id'";
     if ($con->query($sql) === TRUE) {
-        echo "<script>alert('Rekord został pomyślnie usunięty z bazy danych.');</script>";
+
     } else {
         echo "<script>alert('Błąd podczas usuwania rekordu z bazy danych: " . $con->error . "');</script>";
     }
     header("Location: index.php");
 }
+if (isset($_POST['zmien']) && isset($_POST['task_id']) && isset($_POST['change'])) {
+        $task_id = $_POST['task_id'];
+        $new_date = $_POST['change'];
+    
+        
+        $sql = "UPDATE tasks SET date='$new_date' WHERE id='$task_id'";
+        if ($con->query($sql) === TRUE) {
+            header("Location: index.php");
+            exit; 
+        } else {
+            echo "<script>alert('Błąd podczas aktualizowania daty w bazie danych: " . $con->error . "');</script>";
+        }
+    }
 ?>
     </section>
     <footer>
