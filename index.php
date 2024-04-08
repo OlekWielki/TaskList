@@ -37,10 +37,17 @@
                 $task = $_POST['zadanie'];
                 $date = $_POST['data'];
                 $name = $_SESSION['login'];
-                $sql="INSERT INTO tasks VALUES('','$name','$task','$date')";
-                $con->query($sql);
-                unset($_POST['submit']);
-                header("Location: index.php");
+                
+                // Sprawdzenie czy data jest wcześniejsza niż dzisiejsza
+                $currentDateTime = date('Y-m-d H:i:s');
+                if($date < $currentDateTime) {
+                    echo "<script>alert('Nie można dodać zadania z datą wcześniejszą niż dzisiejsza.');</script>";
+                } else {
+                    $sql="INSERT INTO tasks VALUES('','$name','$task','$date')";
+                    $con->query($sql);
+                    unset($_POST['submit']);
+                    header("Location: index.php");
+                }
             }
             
         }
