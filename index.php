@@ -57,10 +57,10 @@
         echo "<div class='taskcontainer' id='task_$wynik[id]'>$wynik[task] $wynik[date]";
         echo "<input type='hidden' name='task_id' value='$wynik[id]'>";
         echo "<input type='submit' class='usun' name='usun' value='usun'>";
-        echo "</div><br>";
-        echo "<input type='text' name='change'>";
-        echo "<input type='submit' class='zmien' name='zmien' value='zmien'>";
         echo "<br>";
+        echo "<input type='datetime-local' name='change'>";
+        echo "<input type='submit' class='zmien' name='zmien' value='zmien'>";
+        echo "</div><br>";
         echo "</form>";
 }
 
