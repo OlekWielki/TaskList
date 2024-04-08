@@ -14,12 +14,12 @@
         </span>
     </header>
     <main>
-        <form method="post">
+        <form method="post" id="formmain">
             <span id="formularz">
-                <Label for="zadanie">Task</Label><br>
-                <input type="text" name="zadanie" id="zadanie" class="forms" required><br>
-                <Label for="data">Data i czas</Label><br>
-                <input type="datetime-local" name="data" id="data" class="forms" required><br>
+                <Label for="zadanie">Task</Label>
+                <input type="text" name="zadanie" id="zadanie" class="forms" required>
+                <Label for="data">Data i czas</Label>
+                <input type="datetime-local" name="data" id="data" class="forms" required>
             </span>
             <span id="przycisk">
                 <input type="submit" name="submit" id="submit" class="forms">
@@ -48,46 +48,46 @@
     </main>
     <section id="taski">
     <?php
-    $name = $_SESSION['login'];
-    $con = new Mysqli("localhost", "root", "", "users");
-    $sql = "SELECT id, task, date FROM tasks WHERE name='$name' ORDER BY date ASC";
-    $wiersz = $con->query($sql);
-    while ($wynik = $wiersz->fetch_assoc()) {
-        echo "<form method='POST' class='wyswietl'>";
-        echo "<div class='taskcontainer' id='task_$wynik[id]'>$wynik[task] $wynik[date]";
-        echo "<input type='hidden' name='task_id' value='$wynik[id]'>";
-        echo "<input type='submit' class='usun' name='usun' value='usun'>";
-        echo "<br>";
-        echo "<input type='datetime-local' name='change'>";
-        echo "<input type='submit' class='zmien' name='zmien' value='zmien'>";
-        echo "</div><br>";
-        echo "</form>";
-}
-
-if (isset($_POST['usun']) && isset($_POST['task_id'])) {
-    $task_id = $_POST['task_id'];
-    $sql = "DELETE FROM tasks WHERE id='$task_id'";
-    if ($con->query($sql) === TRUE) {
-
-    } else {
-        echo "<script>alert('Błąd podczas usuwania rekordu z bazy danych: " . $con->error . "');</script>";
+        $name = $_SESSION['login'];
+        $con = new Mysqli("localhost", "root", "", "users");
+        $sql = "SELECT id, task, date FROM tasks WHERE name='$name' ORDER BY date ASC";
+        $wiersz = $con->query($sql);
+        while ($wynik = $wiersz->fetch_assoc()) {
+            echo "<form method='POST' class='wyswietl'>";
+            echo "<div class='taskcontainer' id='task_$wynik[id]'>$wynik[task] $wynik[date]";
+            echo "<input type='hidden' name='task_id' value='$wynik[id]'>";
+            echo "<input type='submit' class='usun' name='usun' value='usun'>";
+            echo "<br>";
+            echo "<input type='datetime-local' name='change'>";
+            echo "<input type='submit' class='zmien' name='zmien' value='zmien'>";
+            echo "</div><br>";
+            echo "</form>";
     }
-    header("Location: index.php");
-}
-if (isset($_POST['zmien']) && isset($_POST['task_id']) && isset($_POST['change'])) {
+
+    if (isset($_POST['usun']) && isset($_POST['task_id'])) {
         $task_id = $_POST['task_id'];
-        $new_date = $_POST['change'];
-    
-        
-        $sql = "UPDATE tasks SET date='$new_date' WHERE id='$task_id'";
+        $sql = "DELETE FROM tasks WHERE id='$task_id'";
         if ($con->query($sql) === TRUE) {
-            header("Location: index.php");
-            exit; 
+
         } else {
-            echo "<script>alert('Błąd podczas aktualizowania daty w bazie danych: " . $con->error . "');</script>";
+            echo "<script>alert('Błąd podczas usuwania rekordu z bazy danych: " . $con->error . "');</script>";
         }
+        header("Location: index.php");
     }
-?>
+    if (isset($_POST['zmien']) && isset($_POST['task_id']) && isset($_POST['change'])) {
+            $task_id = $_POST['task_id'];
+            $new_date = $_POST['change'];
+        
+            
+            $sql = "UPDATE tasks SET date='$new_date' WHERE id='$task_id'";
+            if ($con->query($sql) === TRUE) {
+                header("Location: index.php");
+                exit; 
+            } else {
+                echo "<script>alert('Błąd podczas aktualizowania daty w bazie danych: " . $con->error . "');</script>";
+            }
+        }
+    ?>
     </section>
     <footer>
         <p>Olek & Szymon Inc.</p>
