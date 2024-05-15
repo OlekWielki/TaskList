@@ -14,15 +14,15 @@
         </span>
     </header>
     <main>
-        <form method="post">
+        <form method="post" id="formmain">
             <span id="formularz">
-                <Label for="zadanie">Task</Label><br>
-                <input type="text" name="zadanie" id="zadanie" required><br>
-                <Label for="data">Data i czas</Label><br>
-                <input type="datetime-local" name="data" id="data" required><br>
+                <Label for="zadanie">Task</Label>
+                <input type="text" name="zadanie" id="zadanie" class="forms" required>
+                <Label for="data">Data i czas</Label>
+                <input type="datetime-local" name="data" id="data" class="forms" required>
             </span>
             <span id="przycisk">
-                <input type="submit" name="submit" id="submit">
+                <input type="submit" name="submit" id="submit" class="forms">
             </span>
         </form>
         <?php 
@@ -33,66 +33,111 @@
         }
         else{
             if(isset($_POST['submit'])){
-                echo $_SESSION['login'];
                 $con = new Mysqli("localhost", "root" , "", "users");
                 $task = $_POST['zadanie'];
                 $date = $_POST['data'];
                 $name = $_SESSION['login'];
-                $sql="INSERT INTO tasks VALUES('','$name','$task','$date')";
-                $con->query($sql);
+                
+        
+                $currentDateTime = date('Y-m-d H:i:s');
+                if($date < $currentDateTime) {
+                    echo "<script>alert('Nie można dodać zadania z datą wcześniejszą niż dzisiejsza.');</script>";
+                } else {
+                    $sql="INSERT INTO tasks VALUES('','$name','$task','$date')";
+                    $con->query($sql);
+                    unset($_POST['submit']);
+                    header("Location: index.php");
+                }
             }
+            
         }
     ?>
     </main>
-    <section>
-        <?php
-            $name = $_SESSION['login'];
-            $con = new Mysqli("localhost", "root" , "", "users");
-            $sql="SELECT task, date FROM tasks WHERE name='$name' ORDER BY date ASC";
-            $wiersz = $con->query($sql);
-            while($wynik = $wiersz->fetch_row()){
-                echo "$wynik[0] $wynik[1] <br>";
+    <section id="taski">
+    <?php
+        $name = $_SESSION['login'];
+        $con = new Mysqli("localhost", "root", "", "users");
+        $sql = "SELECT id, task, date FROM tasks WHERE name='$name' ORDER BY date ASC";
+        $wiersz = $con->query($sql);
+        while ($wynik = $wiersz->fetch_assoc()) {
+            echo "<form method='POST' class='wyswietl'>";
+            echo "<div class='taskcontainer' id='task_$wynik[id]'>$wynik[task] $wynik[date]";
+            echo "<input type='hidden' name='task_id' value='$wynik[id]'>";
+            echo "<input type='submit' class='usun' name='usun' value='usun'>";
+            echo "<br>";
+            echo "<input type='datetime-local' name='change'>";
+            echo "<input type='submit' class='zmien' name='zmien' value='zmien'>";
+            echo "</div><br>";
+            echo "</form>";
+    }
+
+    if (isset($_POST['usun']) && isset($_POST['task_id'])) {
+        $task_id = $_POST['task_id'];
+        $sql = "DELETE FROM tasks WHERE id='$task_id'";
+        $con->query($sql);
+        header("Location: index.php");
+    }
+    if (isset($_POST['zmien']) && isset($_POST['task_id']) && isset($_POST['change'])) {
+            $task_id = $_POST['task_id'];
+            $new_date = $_POST['change'];
+        
+            
+            $sql = "UPDATE tasks SET date='$new_date' WHERE id='$task_id'";
+            if ($con->query($sql) === TRUE) {
+                header("Location: index.php");
+                exit; 
+            } else {
+                echo "<script>alert('Błąd podczas aktualizowania daty w bazie danych: " . $con->error . "');</script>";
             }
-        ?>
+        }
+    ?>
     </section>
     <footer>
         <p>Olek & Szymon Inc.</p>
     </footer>
     <script>
 
-    function wyswietlAlert() {
-        <?php
-            $sql="SELECT task, date FROM tasks WHERE name='$name' ORDER BY date ASC";
-            $wiersz = $con->query($sql);
-            $wynik = $wiersz->fetch_row();
-            
-            echo "
-            var godzinaZPHP = '$wynik[1]';
-            var taskZPHP = '$wynik[0]'; 
-            
-            ";
-        ?>
+function wyswietlAlert() {
+    <?php
+        $sql="SELECT task, date FROM tasks WHERE name='$name' ORDER BY date ASC";
+        $wiersz = $con->query($sql);
+        $wynik = $wiersz->fetch_row();
         
-    	var dzisiaj = new Date();
-            function dodajZero(num) {
-            return num < 10 ? '0' + num : num;
-            }
+        echo "
+        var godzinaZPHP = '$wynik[1]';
+        var taskZPHP = '$wynik[0]'; 
+        
+        ";
+    ?>
+    var dzisiaj = new Date();
+    function dodajZero(num) {
+        return num < 10 ? '0' + num : num;
+    }
 
-        var miesiac = dzisiaj.getMonth() + 1;
-        var dzien = dzisiaj.getDate();
-        var godzina = dzisiaj.getHours();
-        var minuta = dzisiaj.getMinutes();
+    var miesiac = dzisiaj.getMonth() + 1;
+    var dzien = dzisiaj.getDate();
+    var godzina = dzisiaj.getHours();
+    var minuta = dzisiaj.getMinutes();
 
-        var dateandtime =
-            dzisiaj.getFullYear() + '-' + dodajZero(miesiac) + '-' + dodajZero(dzien) + ' ' +
-            dodajZero(godzina) + ':' + dodajZero(minuta) + ":00.000000";
-            if (dateandtime === godzinaZPHP) {
-                alert("wykonaj zadanie " + taskZPHP);
-	        }
-        console.log(dateandtime);
-        console.log(godzinaZPHP);
-        }
-        setInterval(wyswietlAlert, 1000);
-    </script>
+    var dateandtime =
+        dzisiaj.getFullYear() + '-' + dodajZero(miesiac) + '-' + dodajZero(dzien) + ' ' +
+        dodajZero(godzina) + ':' + dodajZero(minuta) + ":00.000000";
+        
+    var alertDisplayed = localStorage.getItem('alertDisplayed');
+    if (!alertDisplayed && dateandtime === godzinaZPHP) {
+        alert("wykonaj zadanie " + taskZPHP);
+        
+        localStorage.setItem('alertDisplayed', true);
+    }
+    else{
+        localStorage.setItem('alertDisplayed', false);
+
+    }
+
+    console.log(dateandtime);
+    console.log(godzinaZPHP);
+}
+setInterval(wyswietlAlert, 1000);
+</script>
 </body>
 </html>
