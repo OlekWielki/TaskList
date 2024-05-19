@@ -27,76 +27,75 @@
         </form>
         <?php 
           session_start();
-          if($_SESSION['login']==""){
-            echo "nic nie ma";
-            header('Location: register.php');
-        }
-        else{
-            if(isset($_POST['submit'])){
-                $con = new Mysqli("localhost", "root" , "", "users");
-                $task = $_POST['zadanie'];
-                $date = $_POST['data'];
-                $name = $_SESSION['login'];
-                
-        
-                $currentDateTime = date('Y-m-d H:i:s');
-                if($date < $currentDateTime) {
-                    echo "<script>alert('Nie można dodać zadania z datą wcześniejszą niż dzisiejsza.');</script>";
-                } else {
-                    $sql="INSERT INTO tasks VALUES('','$name','$task','$date')";
-                    $con->query($sql);
-                    unset($_POST['submit']);
-                    header("Location: index.php");
-                }
-            }
-            
-        }
-    ?>
-    </main>
-    <section id="taski">
-    <?php
-        $name = $_SESSION['login'];
-        $con = new Mysqli("localhost", "root", "", "users");
-        $sql = "SELECT id, task, date FROM tasks WHERE name='$name' ORDER BY date ASC";
-        $wiersz = $con->query($sql);
-        while ($wynik = $wiersz->fetch_assoc()) {
-            echo "<form method='POST' class='wyswietl'>";
-            echo "<div class='taskcontainer' id='task_$wynik[id]'>$wynik[task] $wynik[date]";
-            echo "<input type='hidden' name='task_id' value='$wynik[id]'>";
-            echo "<input type='submit' class='usun' name='usun' value='usun'>";
-            echo "<br>";
-            echo "<input type='datetime-local' name='change'>";
-            echo "<input type='submit' class='zmien' name='zmien' value='zmien'>";
-            echo "</div><br>";
-            echo "</form>";
-    }
-
-    if (isset($_POST['usun']) && isset($_POST['task_id'])) {
-        $task_id = $_POST['task_id'];
-        $sql = "DELETE FROM tasks WHERE id='$task_id'";
-        $con->query($sql);
-        header("Location: index.php");
-    }
-    if (isset($_POST['zmien']) && isset($_POST['task_id']) && isset($_POST['change'])) {
-            $task_id = $_POST['task_id'];
-            $new_date = $_POST['change'];
-        
-            
-            $sql = "UPDATE tasks SET date='$new_date' WHERE id='$task_id'";
-            if ($con->query($sql) === TRUE) {
-                header("Location: index.php");
-                exit; 
-            } else {
-                echo "<script>alert('Błąd podczas aktualizowania daty w bazie danych: " . $con->error . "');</script>";
-            }
-        }
-    ?>
+          if ($_SESSION['login'] == "") {
+              echo "nic nie ma";
+              header('Location: register.php');
+          } else {
+              if (isset($_POST['submit'])) {
+                  $con = new mysqli("localhost", "root", "", "users");
+                  $task = $_POST['zadanie'];
+                  $date = $_POST['data'];
+                  $name = $_SESSION['login'];
+                  
+                  $currentDateTime = date('Y-m-d H:i:s');
+                  if ($date < $currentDateTime) {
+                      echo "<script>alert('Nie można dodać zadania z datą wcześniejszą niż dzisiejsza.');</script>";
+                  } else {
+                      $formattedDate = date('Y-m-d H:i:s', strtotime($date)); // Formatowanie daty w PHP bez milisekund
+                      $sql = "INSERT INTO tasks (name, task, date) VALUES ('$name', '$task', '$formattedDate')";
+                      $con->query($sql);
+                      unset($_POST['submit']);
+                      header("Location: index.php");
+                  }
+              }
+          }
+          ?>
+          
+          <section id="taski">
+          <?php
+          $name = $_SESSION['login'];
+          $con = new mysqli("localhost", "root", "", "users");
+          $sql = "SELECT id, task, DATE_FORMAT(date, '%Y-%m-%d %H:%i:%s') as date FROM tasks WHERE name='$name' ORDER BY date ASC";
+          $wiersz = $con->query($sql);
+          while ($wynik = $wiersz->fetch_assoc()) {
+              echo "<form method='POST' class='wyswietl'>";
+              echo "<div class='taskcontainer' id='task_$wynik[id]'>$wynik[task] $wynik[date]";
+              echo "<input type='hidden' name='task_id' value='$wynik[id]'>";
+              echo "<input type='submit' class='usun' name='usun' value='usun'>";
+              echo "<br>";
+              echo "<input type='datetime-local' name='change'>";
+              echo "<input type='submit' class='zmien' name='zmien' value='zmien'>";
+              echo "</div><br>";
+              echo "</form>";
+          }
+          
+          if (isset($_POST['usun']) && isset($_POST['task_id'])) {
+              $task_id = $_POST['task_id'];
+              $sql = "DELETE FROM tasks WHERE id='$task_id'";
+              $con->query($sql);
+              header("Location: index.php");
+          }
+          if (isset($_POST['zmien']) && isset($_POST['task_id']) && isset($_POST['change'])) {
+              $task_id = $_POST['task_id'];
+              $new_date = $_POST['change'];
+              $formattedNewDate = date('Y-m-d H:i:s', strtotime($new_date)); // Formatowanie daty w PHP bez milisekund
+              
+              $sql = "UPDATE tasks SET date='$formattedNewDate' WHERE id='$task_id'";
+              if ($con->query($sql) === TRUE) {
+                  header("Location: index.php");
+                  exit; 
+              } else {
+                  echo "<script>alert('Błąd podczas aktualizowania daty w bazie danych: " . $con->error . "');</script>";
+              }
+          }
+          ?>
     </section>
     <footer>
         <p>Olek & Szymon Inc.</p>
     </footer>
     <script>
 
+var zrobione = false;
 function wyswietlAlert() {
     <?php
         $sql="SELECT task, date FROM tasks WHERE name='$name' ORDER BY date ASC";
@@ -123,21 +122,16 @@ function wyswietlAlert() {
         dzisiaj.getFullYear() + '-' + dodajZero(miesiac) + '-' + dodajZero(dzien) + ' ' +
         dodajZero(godzina) + ':' + dodajZero(minuta) + ":00.000000";
         
-    var alertDisplayed = localStorage.getItem('alertDisplayed');
-    if (!alertDisplayed && dateandtime === godzinaZPHP) {
+    if (zrobione == false && dateandtime === godzinaZPHP) {
         alert("wykonaj zadanie " + taskZPHP);
-        
-        localStorage.setItem('alertDisplayed', true);
-    }
-    else{
-        localStorage.setItem('alertDisplayed', false);
 
+        zrobione = true;
     }
-
     console.log(dateandtime);
     console.log(godzinaZPHP);
 }
 setInterval(wyswietlAlert, 1000);
+
 </script>
 </body>
 </html>
