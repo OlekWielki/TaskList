@@ -93,3 +93,21 @@ form {
 	border-radius: 2px;
 	border: none;
 }
+.usun{
+	margin: 4px;
+	height: 32px;
+	font-size: 16px;
+	color: white;
+	background-color: var(--main-col3);
+	border-radius: 2px;
+	border: none;
+}
+.zmien{
+	margin: 4px;
+	height: 32px;
+	font-size: 16px;
+	color: white;
+	background-color: var(--main-col3);
+	border-radius: 2px;
+	border: none;
+}
