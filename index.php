@@ -41,7 +41,7 @@
                   if ($date < $currentDateTime) {
                       echo "<script>alert('Nie można dodać zadania z datą wcześniejszą niż dzisiejsza.');</script>";
                   } else {
-                      $formattedDate = date('Y-m-d H:i:s', strtotime($date)); // Formatowanie daty w PHP bez milisekund
+                      $formattedDate = date('Y-m-d H:i:s', strtotime($date));
                       $sql = "INSERT INTO tasks (name, task, date) VALUES ('$name', '$task', '$formattedDate')";
                       $con->query($sql);
                       unset($_POST['submit']);
@@ -61,10 +61,10 @@
               echo "<form method='POST' class='wyswietl'>";
               echo "<div class='taskcontainer' id='task_$wynik[id]'>$wynik[task] $wynik[date]";
               echo "<input type='hidden' name='task_id' value='$wynik[id]'>";
-              echo "<input type='submit' class='usun' name='usun' value='usun'>";
+              echo "<input type='submit' class='usun' name='usun' value='usuń'>";
               echo "<br>";
               echo "<input type='datetime-local' name='change'>";
-              echo "<input type='submit' class='zmien' name='zmien' value='zmien'>";
+              echo "<input type='submit' class='zmien' name='zmien' value='zmień'>";
               echo "</div><br>";
               echo "</form>";
           }
@@ -78,15 +78,13 @@
           if (isset($_POST['zmien']) && isset($_POST['task_id']) && isset($_POST['change'])) {
               $task_id = $_POST['task_id'];
               $new_date = $_POST['change'];
-              $formattedNewDate = date('Y-m-d H:i:s', strtotime($new_date)); // Formatowanie daty w PHP bez milisekund
+              $formattedNewDate = date('Y-m-d H:i:s', strtotime($new_date));
               
               $sql = "UPDATE tasks SET date='$formattedNewDate' WHERE id='$task_id'";
               if ($con->query($sql) === TRUE) {
                   header("Location: index.php");
                   exit; 
-              } else {
-                  echo "<script>alert('Błąd podczas aktualizowania daty w bazie danych: " . $con->error . "');</script>";
-              }
+              } 
           }
           ?>
     </section>
