@@ -50,7 +50,9 @@ form {
 	justify-content: center;
 }
 #formularz {
-	display: flex;
+	display: grid;
+	grid-template-columns: 10% 1fr 25% 1fr;
+	font-size: 150%;
 }
 #przycisk {
 	display: flex;
