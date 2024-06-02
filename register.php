@@ -7,21 +7,15 @@
     <title>Document</title>
 </head>
 <body>
-
-<div id="tlo">
-<div id="login">
-    <form method = "POST">
-
-        <h1>REJESTRACJA</h1><br>
-        <Label for="username">Username</Label>
-        <input type="text" name = "username">
-        <Label for = "password">password</Label>
-        <input type="password" name = "password">
-        <input type="submit">
+    <form method="post">
+        <h3>Rejestracja do Task Manager</h3>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password">
+        <input type="submit" value="Login" id="guzik">
+        <p>Masz już konto? <a href = "login.php">Zaloguj<a></p>
     </form>
-</div></div>
-    
-    <p>Masz już konto? <a href = "login.php">Zaloguj<a></p>
     <?php 
         session_start();
         $con = new Mysqli("localhost", "root" , "", "users");

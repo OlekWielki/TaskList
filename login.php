@@ -4,14 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="stylelogin.css">
 </head>
 <body>
-<form method="post">
-    Username: <input type="text" name="username"><br>
-    Password: <input type="password" name="password"><br>
-    <input type="submit" value="Login">
-</form>
-<?php 
+    <form method="post">
+        <h3>Logowanie do Task Manager</h3>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password">
+        <input type="submit" value="Login" id="guzik">
+        <p>Masz już konto? <a href = "login.php">Zaloguj<a></p>
+    </form>
+    <?php 
     session_start();
     $con = new Mysqli("localhost", "root" , "", "users");
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
