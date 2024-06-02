@@ -5,6 +5,13 @@
 	--main-col3: #e78895;
 	--main-col4: #bed1cf;
 }
+.taskcontainer{
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-weight: bold;
+}
 a {
 	text-decoration: none;
 }
@@ -50,9 +57,7 @@ form {
 	justify-content: center;
 }
 #formularz {
-	display: grid;
-	grid-template-columns: 10% 1fr 25% 1fr;
-	font-size: 150%;
+	display: flex;
 }
 #przycisk {
 	display: flex;

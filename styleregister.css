@@ -1,35 +1,52 @@
+* {
+    margin: 0;
+    padding: 0;
+}
 body{
-    padding: 0%;
-    margin: 0%;
-}
-#tlo{
-    display: flex;
+    font-family: 'Arial';
+    background-color: #f0f0f0;
+    color: #333;
     justify-content: center;
     align-items: center;
-    background-color: rgb(82, 85, 97);
-    width: 100%;
     height: 100vh;
-    border-radius: 15%;
+    display: grid;
 }
-#login{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgb(39, 42, 55);
-    height: 70vh;
-    width: 70%;
-    color:white;
-    border-radius: 10%;
+form{
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px grey;
+    width: 300px;
+    text-align: left;
 }
-input{
-    border: 1px black solid;
-    height: 200%;
+h3{
+    margin-bottom: 20px;
+}
+#username, #password{
+    width: 95%;
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+
+}
+#guzik{
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
     width: 100%;
-    font-size: 200%;
+    margin-top: 10px;
+}
+#guzik:hover{
+    background-color: #0056b3;
 }
 label{
-    font-size: 150%;
+    margin-bottom: 5px;
 }
-#sub{
-    padding: 10px;
+p{
+    margin-top: 10px;
+    color: red;
 }
