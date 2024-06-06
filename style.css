@@ -5,6 +5,9 @@
 	--main-col3: #e78895;
 	--main-col4: #bed1cf;
 }
+h1{
+	padding-left: 10px;
+}
 #taski {
 	width: 100%;
 	display: flex;
@@ -93,4 +96,13 @@ form {
 	border-radius: 2px;
 	border: none;
 }
-
+input[type="submit"]{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--main-col3);
+	color: white;
+	border: none;
+	font-size: 150%;
+	margin: 0 5px 0 5px;
+}
