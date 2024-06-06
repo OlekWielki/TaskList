@@ -31,7 +31,7 @@
                 <input type="datetime-local" name="data" id="data" class="forms" required>
             </span>
             <span id="przycisk">
-                <input type="submit" name="submit" id="submit" class="forms">
+                <input type="submit" name="submit" id="submit" class="forms" value="Dodaj Zadanie">
             </span>
         </form>
         <?php 
@@ -149,7 +149,6 @@ function wyswietlAlert() {
         
     if (zrobione == false && dateandtime === godzinaZPHP) {
         alert("wykonaj zadanie " + taskZPHP);
-
         zrobione = true;
     }
     console.log(dateandtime);
